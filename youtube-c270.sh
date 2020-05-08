@@ -32,7 +32,7 @@ if [ -f /var/tmp/location.txt ]; then
  textfile='/var/tmp/location.txt':reload=1":\
  -c:v h264_omx -b:v 1000k -bufsize 1500k -vsync 0\
  -c:a aac -ab 128k -af volume=0.9 -g 16 -t 600\
- -f flv rtmp://a.rtmp.youtube.com/live2/u3wc-1gyz-71c7-6waj
+ -f flv rtmp://a.rtmp.youtube.com/live2/<your youtube key>
 
 else
  /home/pi/aquestalkpi/AquesTalkPi "ロケーションファイルが見つかりません" | aplay
