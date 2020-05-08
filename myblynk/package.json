@@ -1,0 +1,11 @@
+{
+  "name": "blynk-yt",
+  "version": "1.0.0",
+  "description": "my blynk project for youtube live",
+  "main": "index.js",
+  "scripts": {
+    "test": "index.js"
+  },
+  "author": "Habingo Project",
+  "license": "ISC"
+}

@@ -1,0 +1,253 @@
+#!/usr/bin/node
+
+var Blynk = require('blynk-library');
+
+var AUTH = 'e89a01e74e024b4d9423ea7bf7ae9ea2';
+
+var blynk = new Blynk.Blynk(AUTH);
+
+var v0 = new blynk.VirtualPin(0);//LCD 1行目
+var v1 = new blynk.VirtualPin(1);//スライダー
+var v2 = new blynk.VirtualPin(2);//LCD 2行目
+var v3 = new blynk.WidgetLED(3);//LED USB
+var v4 = new blynk.WidgetLED(4);//LED Camera
+var v5 = new blynk.WidgetLED(5);//LED Tube
+var v6 = new blynk.WidgetLED(6);//LED File
+var v7 = new blynk.VirtualPin(7);//Log
+var v8 = new blynk.VirtualPin(8);//graph
+var v9 = new blynk.VirtualPin(9);//meter
+var v10 = new blynk.VirtualPin(10);//SW Start
+var v11 = new blynk.VirtualPin(11);//SW Stop
+var v12 = new blynk.VirtualPin(12);//BGM
+var v13 = new blynk.VirtualPin(13);//Weather/Arduino Reset
+var v14 = new blynk.VirtualPin(14);//X11 Reset
+var v15 = new blynk.VirtualPin(15);//Reboot
+var v16 = new blynk.VirtualPin(16);//Shutdown
+var v17 = new blynk.VirtualPin(17);//Dest Menu
+
+var keyvalue=255;
+var tubevalue = 1;
+
+v1.write(keyvalue);
+v3.turnOff();
+v4.turnOff();
+v5.turnOff();
+v6.turnOff();
+v10.write(0);
+v11.write(0);
+v12.write(tubevalue);
+v13.write(0);
+v14.write(0);
+v15.write(0);
+
+const exec = require('child_process').exec;
+
+function check_status(){
+  exec('pgrep -l shutdown_by', (err, stdout, stderr) => {
+    //if (err) { console.log(err); }
+    if(stdout){
+      //console.log(stdout);
+      v5.turnOn();
+    }
+    else{
+      v5.turnOff();
+    }
+  });
+
+  exec('pgrep -l file-', (err, stdout, stderr) => {
+    //if (err) { console.log(err); }
+    if(stdout != ""){
+      //console.log(stdout);
+      v6.turnOn();
+    }
+    else{
+      v6.turnOff();
+    }
+  });
+
+  var fs = require('fs');
+    fs.readFile('/var/tmp/lnglat.txt', 'utf8', function (err, text) {
+      //console.log(err);
+      if(!err){
+        var textarray = text.split(",");
+        if(text){
+          v0.write(textarray[0]);
+          v2.write(textarray[1]);
+        }
+        else{
+          v0.write("Empty data");
+          v2.write("in lnglat.txt");
+        }
+      }
+      else{
+        v0.write("no gps data");
+        v2.write("in /var/tmp/");
+      }
+    });
+
+    fs.access('/media/pi/USB03', function (err) {
+      if(err){
+        v3.turnOff();
+      }
+      else{
+        v3.turnOn();
+      }  
+    });
+
+    fs.access('/dev/video0', function (err) {
+      if(err){
+        v4.turnOff();
+      }
+      else{
+        v4.turnOn();
+      }  
+    });
+}
+
+setInterval(function() {
+  check_status();
+}, 1000);
+  
+v1.on('write', function(param) {
+  console.log('V1:', param[0]);
+  keyvalue = param[0];
+  if(keyvalue == 0) {
+    v10.write(1);
+    v11.write(0);
+    v12.write(tubevalue);
+  }
+  else if(keyvalue == 255) {
+    v10.write(0);
+    v11.write(1);
+    v12.write(tubevalue);
+  }
+  else {
+    v10.write(0);
+    v11.write(0);
+    v12.write(tubevalue);
+  }
+});
+
+v8.on('read', function() {
+  exec('cat /sys/class/thermal/thermal_zone0/temp', (err, stdout, stderr) => {
+    if (err) { console.log(err); }
+    v8.write(stdout/1000);
+   });
+});
+
+v9.on('read', function() {
+  exec('cat /sys/class/thermal/thermal_zone0/temp', (err, stdout, stderr) => {
+    if (err) { console.log(err); }
+    v9.write(stdout/1000);
+   });
+});
+
+v10.on('write', function() {
+  if (keyvalue == 0 && tubevalue == 1){
+    exec('sudo systemctl start assistant.service', (err, stdout, stderr) => {
+      if (err) { console.log(err); }
+      console.log(stderr);
+   });}
+
+  else if (keyvalue == 0 && tubevalue == 0){
+    exec('sudo systemctl start assistant.service', (err, stdout, stderr) => {
+      if (err) { console.log(err); }
+      console.log(stderr);
+   });}
+
+  else{
+    v5.turnOff();
+    v6.turnOff();
+    v10.write(0);
+    v11.write(0);
+  }
+  check_status();
+});
+
+v11.on('write', function() {
+  if(keyvalue == 255){
+    exec('sudo systemctl stop assistant.service', (err, stdout, stderr) => {
+      if (err) { console.log(err); }
+      v7.write(stderr);
+   });}
+
+  else{
+    v10.write(0);
+    v11.write(0);
+  }
+  check_status();
+});
+
+v12.on('write', function(param) {
+  console.log('V12:', param[0]);
+  tubevalue = param[0];
+});
+
+v13.on('write', function() {
+  exec('python /home/pi/mylocation.py', (err, stdout, stderr) => {
+      if (err) { console.log(err); }
+      console.log(stderr);
+      v7.write(stdout);
+      v13.write(0);
+      v0.write("Weather Forcast");
+  });
+  exec('sudo systemctl restart meter.service', (err, stdout, stderr) => {
+      if (err) { console.log(err); }
+      v7.write(stderr);
+      v13.write(0);
+      v2.write("Meter Restarted");
+  });
+});
+
+v14.on('write', function() {
+  exec('sudo systemctl restart lightdm.service', (err, stdout, stderr) => {
+      if (err) { console.log(err); }
+      v7.write(stderr);
+      v14.write(0);
+      v2.write("X11 Restart");
+  });
+  exec('sudo systemctl restart meter.service', (err, stdout, stderr) => {
+      if (err) { console.log(err); }
+      v7.write(stderr);
+      v14.write(0);
+      v2.write("Meter Restart");
+  });
+});
+
+v15.on('write', function() {
+  exec('sudo reboot', (err, stdout, stderr) => {
+      if (err) { console.log(err); }
+      v7.write(stderr);
+      v15.write(0);
+      v2.write("SYSTEM Rebot");
+  });
+});
+
+v16.on('write', function() {
+  exec('sudo shutdown -h now', (err, stdout, stderr) => {
+      if (err) { console.log(err); }
+      v7.write(stderr);
+      v15.write(0);
+      v2.write("Shutdown");
+  });
+});
+
+v17.on('write', function(param) {
+  console.log('V17:', param[0]);
+  menuvalue = param[0];
+  if(menuvalue == 1) {
+    exec('python /home/pi/home.py', (err, stdout, stderr) => {
+      if (err) { console.log(err); }
+      v7.write(stderr);
+      v2.write("Go Home");
+    });
+  }
+  else if(menuvalue == 2) {
+    exec('python /home/pi/gifu-u.py', (err, stdout, stderr) => {
+      if (err) { console.log(err); }
+      v7.write(stderr);
+      v2.write("Go Gifu U.");
+    });
+  }
+});
+
