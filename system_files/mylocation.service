@@ -1,0 +1,12 @@
+[Unit]
+Description=Decode Address from lnglat.txt /home/pi/mylocation.py
+Wants=network.target
+
+[Service]
+ExecStart=/home/pi/mylocation.py
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,12 @@
+[Unit]
+Description=Heading Program /home/pi/heading.py
+Wants=network.target
+
+[Service]
+ExecStart=/home/pi/heading.py
+Restart=always
+RestartSec=1s
+
+[Install]
+WantedBy=multi-user.target
+

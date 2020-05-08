@@ -1,0 +1,15 @@
+[Unit]
+Description=Button2 Control Program /home/pi/button.py
+After=network.target
+Before=shutdown.target youtube.target filetube.target
+Requires=network.target
+
+[Service]
+ExecStart=/home/pi/button.py
+OnBootSec=10sec
+Restart=always
+RestartSec=1s
+
+[Install]
+WantedBy=multi-user.target
+

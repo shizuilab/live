@@ -1,0 +1,12 @@
+[Unit]
+Description=Temperature/Humidity Logging Program /home/pi/temphum.py
+Wants=network.target
+
+[Service]
+ExecStart=/home/pi/temphum.py
+Restart=always
+RestartSec=1s
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,14 @@
+[Unit]
+Description=my-oneshot
+After=network.target
+Before=shutdown.target youtube.target filetube.target
+Requires=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/pi/helloVT.sh
+ExecStop=/home/pi/byeVT.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target

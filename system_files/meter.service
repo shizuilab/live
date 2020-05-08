@@ -1,0 +1,13 @@
+[Unit]
+Description=OLED Meter Program /home/pi/loop.py
+Wants=network.target
+
+[Service]
+ExecStart=/home/pi/loop.py
+OnBootSec=10sec
+Restart=always
+RestartSec=2s
+
+[Install]
+WantedBy=multi-user.target
+

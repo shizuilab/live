@@ -1,0 +1,12 @@
+[Unit]
+Description=Shutdown/Reboot raspberry pi by GPIO button input
+Wants=network.target
+
+[Service]
+ExecStart=/home/pi/shutdown_by_button.py
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
+

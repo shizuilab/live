@@ -1,0 +1,13 @@
+[Unit]
+Description=Adjust Time by NICT
+Wants=network.target
+
+[Service]
+ExecStart=/home/pi/nict.sh
+OnBootSec=10sec
+Restart=always
+RestartSec=60s
+
+[Install]
+WantedBy=multi-user.target
+

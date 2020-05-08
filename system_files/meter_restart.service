@@ -1,0 +1,12 @@
+[Unit]
+Description=OLED Meter Restart
+Wants=network.target
+
+[Service]
+ExecStart=/home/pi/restartloop.sh
+Restart=always
+RestartSec=10sec
+
+[Install]
+WantedBy=multi-user.target
+

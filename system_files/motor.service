@@ -1,0 +1,13 @@
+[Unit]
+Description=Heading Program /home/pi/motor.py
+Wants=network.target
+
+[Service]
+User = root
+ExecStart=/home/pi/motor.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+

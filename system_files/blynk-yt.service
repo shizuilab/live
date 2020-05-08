@@ -1,0 +1,14 @@
+[Unit]
+Description=Blynk Service
+After=network.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/myblynk
+ExecStart=/home/pi/myblynk/index.js 
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+

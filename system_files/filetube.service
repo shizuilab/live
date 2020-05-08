@@ -1,0 +1,13 @@
+[Unit]
+Description=Drive Recorder /home/pi/file-c270.sh
+Wants=network.target
+After=startmessage
+
+[Service]
+ExecStart=/home/pi/file-c270.sh
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+

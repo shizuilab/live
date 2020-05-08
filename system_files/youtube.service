@@ -1,0 +1,13 @@
+[Unit]
+Description=Youtube Live /home/pi/youtube-c270.sh
+Requires=network.target
+After=startmessage
+
+[Service]
+ExecStart=/home/pi/youtube-c270.sh
+Restart=always
+RestartSec=12
+
+[Install]
+WantedBy=multi-user.target
+
