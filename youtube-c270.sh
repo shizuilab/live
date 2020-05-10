@@ -24,8 +24,13 @@ if [[ $(arecord -l) == *'USB Audio Device'* ]]; then
  fontcolor=#FFFFFF:fontsize=20:x=10:y=10:box=1:boxcolor=black@0.4:\
  textfile='/var/tmp/location.txt':reload=1":\
  -c:v h264_omx -b:v 1000k -bufsize 1500k -vsync 0\
+<<<<<<< HEAD
  -c:a aac -ab 128k -af volume=0.9 -g 16 -t 3600\
  -f flv rtmp://a.rtmp.youtube.com/live2/ju63-rzf3-te44-c373
+=======
+ -c:a aac -ab 128k -af volume=0.9 -g 16 -t 600\
+ -f flv rtmp://a.rtmp.youtube.com/live2/<your youtube key>
+>>>>>>> 26cc12ac829ab827003b130309d0da5e0d019cc7
 
 else
  /home/pi/aquestalkpi/AquesTalkPi "BGM付きストリーミングを開始します" | aplay
