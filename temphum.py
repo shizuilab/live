@@ -104,7 +104,7 @@ def compensate_T(adc_T):
 	v1 = (adc_T / 16384.0 - digT[0] / 1024.0) * digT[1]
 	v2 = (adc_T / 131072.0 - digT[0] / 8192.0) * (adc_T / 131072.0 - digT[0] / 8192.0) * digT[2]
 	t_fine = v1 + v2
-	temperature = t_fine / 5120.0
+	temperature = t_fine / 5120.0 - 4 #実測値より補正（−４度）
 	print ("temp : %-6.2f ℃" % (temperature)) 
 	with open("/var/tmp/temperature.txt", "w") as myfile:
 		myfile.write(str(round(temperature,1)))

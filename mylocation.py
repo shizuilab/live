@@ -60,7 +60,7 @@ url = BASE_URL + "?appid=%s&coordinates=%s&output=%s" % (APP_ID,COORDINATES,OUTP
 json_tree = json.loads(urllib.urlopen(url).read())
 #print(json_tree)
 
-for var in range(0,7):
+for var in range(0,1):
     date     = json_tree['Feature'][0]['Property']['WeatherList']['Weather'][var]['Date']
     rainfall = json_tree['Feature'][0]['Property']['WeatherList']['Weather'][var]['Rainfall']
     type     = json_tree['Feature'][0]['Property']['WeatherList']['Weather'][var]['Type']
@@ -73,7 +73,7 @@ for var in range(0,7):
     elif (rainfall < 10.0):
         rain_level = "雨が降"
     elif (rainfall < 20.0):
-        rain_level = "強目の雨が降"
+        rain_level = "強めの雨が降"
     elif (rainfall < 30.0):
         rain_level = "雨が強く降"
     elif (rainfall < 50.0):
