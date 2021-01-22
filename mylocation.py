@@ -1,9 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # 配信用に時刻、住所、気温、湿度、気圧を整形
 
-import os, time, commands, datetime
-import urllib
+import os, time, datetime
+import urllib.request
 import pprint
 import json
 import sys
@@ -21,6 +21,10 @@ with open("/var/tmp/pressure.txt", "r") as myfile:
     mypressure = myfile.read()
 
 mylocation = mylocation + " 気温" + mytemperature + "℃ 湿度" + myhumidity + "％ 気圧" + mypressure + "hPa" 
+
+# wanapi用にセンサーデータを書き込む
+with open("/var/tmp/sensors.txt", "w") as myfile:
+    myfile.write(mylocation)
 
 # Weather
 APP_ID = "dj0zaiZpPUhFckxmNlZqMDRubSZzPWNvbnN1bWVyc2VjcmV0Jng9ZDM-"
@@ -43,11 +47,22 @@ OUTPUT="json"
 # Reverse Geocoding from Coodinates
 ZIP_BASE_URL = "https://map.yahooapis.jp/geoapi/V1/reverseGeoCoder"
 zip_url = ZIP_BASE_URL + "?appid=%s&coordinates=%s&output=%s" % (APP_ID,COORDINATES,OUTPUT)
-zip_json_tree = json.loads(urllib.urlopen(zip_url).read())
+req = urllib.request.Request(zip_url)
+with urllib.request.urlopen(req) as res:
+    print(res)
+    zip_json_tree = json.load(res)
+    print(zip_json_tree)
 name = zip_json_tree['Feature'][0]['Property']['Address']
+name = name.replace('３０９１ー１', '')
+print(name)
+
+# wanapi用に住所データを書き込む
+with open("/var/tmp/wanapi.txt", "w") as myfile:
+    myfile.write(name)
+
 if len(name) > 0:
     #mylocation = mylocation + "\n" + "仮想通貨取引実況中  "
-    mylocation = mylocation + "\n" + name.encode('utf_8') + " "
+    mylocation = mylocation + "\n" + name + " "
 else:
     with open("/var/tmp/locationbuff.txt", "w") as myfile:
         myfile.write(mylocation)
@@ -57,7 +72,10 @@ else:
 # Weather forcast from Coordinates
 BASE_URL = "https://map.yahooapis.jp/weather/V1/place"
 url = BASE_URL + "?appid=%s&coordinates=%s&output=%s" % (APP_ID,COORDINATES,OUTPUT)
-json_tree = json.loads(urllib.urlopen(url).read())
+req = urllib.request.Request(url)
+with urllib.request.urlopen(req) as res:
+    json_tree = json.load(res)
+
 #print(json_tree)
 
 for var in range(0,1):
@@ -102,9 +120,12 @@ for var in range(0,1):
 
     #print talk
     if len(talk) > 0:
+        wanapilocation = mylocation
         mylocation = mylocation + talk
 
 with open("/var/tmp/locationbuff.txt", "w") as myfile:
     myfile.write(mylocation)
 os.system('sudo mv /var/tmp/locationbuff.txt /var/tmp/location.txt')
 print(mylocation)
+
+

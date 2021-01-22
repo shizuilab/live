@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import RPi.GPIO as GPIO
-import os, time, commands, subprocess
-from pijuice import PiJuice
+import os, time
+#from pijuice import PiJuice
 #import Adafruit_SSD1306
 
 #import Image
@@ -12,7 +12,7 @@ from pijuice import PiJuice
 
 GPIO.setmode(GPIO.BCM)
 
-pj = PiJuice(1, 0x14)
+#pj = PiJuice(1, 0x14)
 
 # Raspberry Pi pin configuration
 #RST = 24
@@ -52,7 +52,7 @@ while True:
             if sw_counter >= 5:
 
             # Shutdown Message
-                pj.power.SetPowerOff(30)
+                #pj.power.SetPowerOff(30)
                 #os.system("sudo systemctl stop meter.service")
                 time.sleep(1)
 
@@ -69,8 +69,8 @@ while True:
                 #disp.display()
                 #time.sleep(1)
 
-                os.system("sudo /home/pi/shutdownVT.sh")
-                #os.system("sudo shutdown -h now")
+                #os.system("sudo /home/pi/shutdownVT.sh")
+                os.system("sudo shutdown -h now")
                 break
         else:
             print("signal not significant")

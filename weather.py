@@ -1,8 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import os, time, commands, datetime
-import urllib
+import os, time, datetime
+import urllib.request
 import pprint
 import json
 import sys
@@ -10,8 +10,6 @@ import sys
 d = datetime.datetime.today()
 
 # Speak Temp and Hum
-ip=commands.getoutput("ifconfig wlan0 | grep 'inetアドレス' | awk '{ print $1 }'").split(':')
-print ip[1]
 os.system("sudo date +'%I時%M分' | /home/pi/aquestalkpi/AquesTalkPi -g 100 -f - | aplay")
 
 with open("/var/tmp/temperature.txt", "r") as myfile:
@@ -41,11 +39,16 @@ OUTPUT="json"
 # Reverse Geocoding from Coodinates
 ZIP_BASE_URL = "https://map.yahooapis.jp/geoapi/V1/reverseGeoCoder"
 zip_url = ZIP_BASE_URL + "?appid=%s&coordinates=%s&output=%s" % (APP_ID,COORDINATES,OUTPUT)
-zip_json_tree = json.loads(urllib.urlopen(zip_url).read())
+req = urllib.request.Request(zip_url)
+with urllib.request.urlopen(req) as res:
+    print(res)
+    zip_json_tree = json.load(res)
+    print(zip_json_tree)
 name = zip_json_tree['Feature'][0]['Property']['Address']
-print (name.encode('utf_8'))
+print(name)
+
 if len(name) > 0:
-    os.system('/home/pi/aquestalkpi/AquesTalkPi -g 100 "' + name.encode('utf_8') + '" | aplay')
+    os.system('/home/pi/aquestalkpi/AquesTalkPi -g 100 "' + name + '" | aplay')
 else:
     os.system("/home/pi/aquestalkpi/AquesTalkPi -g 100 '住所を特定できません' | aplay")
     sys.exit()
@@ -53,8 +56,9 @@ else:
 # Weather forcast from Coordinates
 BASE_URL = "https://map.yahooapis.jp/weather/V1/place"
 url = BASE_URL + "?appid=%s&coordinates=%s&output=%s" % (APP_ID,COORDINATES,OUTPUT)
-json_tree = json.loads( urllib.urlopen(url).read())
-# print (url)
+req = urllib.request.Request(url)
+with urllib.request.urlopen(req) as res:
+    json_tree = json.load(res)
 
 for var in range(0,7):
     date     = json_tree['Feature'][0]['Property']['WeatherList']['Weather'][var]['Date']

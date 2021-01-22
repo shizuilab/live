@@ -5,16 +5,16 @@ from lsm303d import LSM303D
 import pandas as pd
 
 lnglat = [136.780208,35.458272] # default current position is home
-destination = lnglat # default destination is home
+#destination = lnglat # default destination is home
 
-#destination = [136.733861,35.466949] # default destination is university
+destination = [136.733861,35.466949] # default destination is university
 
 lsm = LSM303D(0x1d)  # Change to 0x1e if you have soldered the address jumper
 
 last_heading = 0.0
 
 a = 6378137.0
-b = 6356752.314140 #hunipe's constants 
+b = 6356752.314140 #hunipe's constants
 
 xmax = 0.3302
 ymax = 0.2404
@@ -80,6 +80,7 @@ while True:
     if heading < 0:
         heading = heading + 360
 
+    heading = 0 #北向き固定設定
     #heading = last_heading + 0.1 * (heading - last_heading)
 
     homelngrad = destination[0] / 180 * math.pi
@@ -90,7 +91,7 @@ while True:
     dy = currentlatrad - homelatrad
     dx = currentlngrad - homelngrad
     my = (currentlatrad + homelatrad) / 2
-    
+
     e2 = (a * a - b * b) / (a * a)
     Mnum = a * (1 - e2)
     W = math.sqrt(1 - e2 * math.sin(my) * math.sin(my))
