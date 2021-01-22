@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 User=pi
-WorkingDirectory=/home/pi/myblynk
-ExecStart=/home/pi/myblynk/index.js 
+WorkingDirectory=/home/pi/wanapi
+ExecStart=/usr/bin/node /home/pi/live/index.js 
 Restart=always
 RestartSec=10
 

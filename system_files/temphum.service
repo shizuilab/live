@@ -1,9 +1,9 @@
 [Unit]
-Description=Temperature/Humidity Logging Program /home/pi/temphum.py
+Description=Temperature/Humidity sensors temphum.py
 Wants=network.target
 
 [Service]
-ExecStart=/home/pi/temphum.py
+ExecStart=/home/pi/live/temphum.py
 Restart=always
 RestartSec=1s
 

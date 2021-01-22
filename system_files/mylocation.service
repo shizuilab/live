@@ -1,9 +1,9 @@
 [Unit]
-Description=Decode Address from lnglat.txt /home/pi/mylocation.py
+Description=Decode Address from lnglat.txt
 Wants=network.target
 
 [Service]
-ExecStart=/home/pi/mylocation.py
+ExecStart=/usr/bin/python3 /home/pi/live/mylocation.py
 Restart=always
 RestartSec=5s
 

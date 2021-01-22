@@ -1,9 +1,10 @@
 [Unit]
-Description=Heading Program /home/pi/heading.py
+Description=Direction/Distance Monitor heading.py
 Wants=network.target
 
 [Service]
-ExecStart=/home/pi/heading.py
+ExecStart=/home/pi/live/heading.py
+OnBootSec=10sec
 Restart=always
 RestartSec=1s
 

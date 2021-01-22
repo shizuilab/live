@@ -1,11 +1,11 @@
 [Unit]
-Description=Button2 Control Program /home/pi/button.py
+Description=Button2 Control Program button.py
 After=network.target
 Before=shutdown.target youtube.target filetube.target
 Requires=network.target
 
 [Service]
-ExecStart=/home/pi/button.py
+ExecStart=/usr/bin/python3 /home/pi/live/button.py
 OnBootSec=10sec
 Restart=always
 RestartSec=1s
