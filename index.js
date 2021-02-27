@@ -275,6 +275,10 @@ v11.on('write', function() {
   if(keyvalue == 255){
     exec('sudo systemctl stop youtube.service', (err, stdout, stderr) => {
       if (err) { console.log(err); }
+      console.log(stderr);
+   });
+    exec('sudo systemctl start filetube.service', (err, stdout, stderr) => {
+      if (err) { console.log(err); }
       console.log(stderr);;
    });}
   else{

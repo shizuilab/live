@@ -59,9 +59,10 @@ try:
             else:
                 print("stopping Youtube streaming...")
                 os.system("sudo systemctl stop youtube.service")
+                os.system("sudo systemctl start filetube.service")
 
         button_previous = button_current
-        time.sleep(0.03)
+        time.sleep(0.5)
 
         GPIO.output(24, GPIO.HIGH)
 
