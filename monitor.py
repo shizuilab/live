@@ -1,27 +1,31 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 import sys, os, time, ipget
-import Adafruit_SSD1306
+
+from board import SCL, SDA
+import busio
+import adafruit_ssd1306
 
 from PIL import Image, ImageDraw, ImageFont
 
 import datetime
 
-GPIO.setmode(GPIO.BCM)
+#GPIO.setmode(GPIO.BCM)
+i2c = busio.I2C(SCL, SDA)
 
 # Raspberry Pi pin configuration
-RST = 21
+#RST = 21
 
-disp = Adafruit_SSD1306.SSD1306_128_64(rst=RST)
+disp = adafruit_ssd1306.SSD1306_I2C(128,64,i2c)
 
 # Initialize library.
-disp.begin()
+#disp.begin()
 
 # Clear display.
-disp.clear()
-disp.display()
+disp.fill(0)
+disp.show()
 
 # Create blank image for drawing.
 # Make sure to create image with mode '1' for 1-bit color.
@@ -35,10 +39,11 @@ draw = ImageDraw.Draw(image)
 # Draw a black filled box to clear the image.
 draw.rectangle((0,0,width,height), outline=0, fill=0)
 
-font = ImageFont.truetype('/usr/share/fonts/truetype/noto/NotoMono-Regular.ttf', 12, encoding='unic')
+font = ImageFont.truetype('/usr/share/fonts/truetype/noto/NotoMono-Regular.ttf', 14, encoding='unic')
 
 try:
     while True:
+
         # Get time and date
         d = datetime.datetime.today()
         mydate = d.strftime("%m/%d-")
@@ -47,7 +52,7 @@ try:
         # Get IP address
         ip=ipget.ipget()
 
-        #draw.rectangle((0,0,width,height), outline=0, fill=0)
+        draw.rectangle((0, 0, width, height), outline=0, fill=0)
 
         mystring= mydate + mytime
         draw.text((0,0), mystring, font=font, fill=255)
@@ -55,7 +60,7 @@ try:
         draw.text((0,40), ip.ipaddr('eth0') , font=font, fill=255)
 
         disp.image(image)
-        disp.display()
+        disp.show()
 
         time.sleep(1)
 
