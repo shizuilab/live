@@ -1,12 +1,10 @@
 [Unit]
-Description=Drive Recorder /home/pi/file-c270.sh
-Wants=network.target
+Description=Youtube Live stop streaming
+Requires=network.target
 After=startmessage
 
 [Service]
-ExecStart=/home/pi/file-c270.sh
-Restart=always
-RestartSec=10
+ExecStart=/home/pi/live/stoptube.sh
 
 [Install]
 WantedBy=multi-user.target
