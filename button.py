@@ -16,9 +16,9 @@ GPIO.output(25, GPIO.HIGH)
 time.sleep(5)
 GPIO.output(25, GPIO.LOW)
 
-os.system('/home/pi/aquestalkpi/AquesTalkPi "システム起動しました" | aplay')
+os.system('/home/pi/aquestalkpi/AquesTalkPi "システム起動しました" | aplay -D plughw:1,0')
 
-#os.system("sudo /home/pi/start-file.sh")
+os.system("sudo systemctl start filetube")
 
 try:
     button_previous = 1
@@ -28,6 +28,7 @@ try:
 
     while True:
         button_current = GPIO.input(26)
+        print(button_current)
         flag_pressed = button_previous + button_current
 
         if (not(flag_pressed)):
@@ -37,11 +38,11 @@ try:
 
         if(button_current and (not button_previous)):
             GPIO.output(24,GPIO.LOW)
-            os.system('/home/pi/aquestalkpi/AquesTalkPi "再起動します" | aplay')
+            os.system('/home/pi/aquestalkpi/AquesTalkPi "再起動します" | aplay -D plughw:1,0')
             os.system("sudo shutdown -r now")
         if((not flag_pressed) and brojac >= 5):
             GPIO.output(24,GPIO.LOW)
-            os.system('/home/pi/aquestalkpi/AquesTalkPi "シャットダウンします" | aplay')
+            os.system('/home/pi/aquestalkpi/AquesTalkPi "シャットダウンします" | aplay -D plughw:1,0')
             os.system("sudo shutdown -h now")
             break
 
@@ -55,9 +56,10 @@ try:
             GPIO.output(25, GPIO.HIGH)
             if os.system('pgrep -l youtube-') == 256:
                 print("starting Youtube streameing...")
+                os.system("sudo systemctl stop filetube.service")
                 os.system("sudo systemctl start youtube.service")
             else:
-                print("stopping Youtube streaming...")
+                print("starting drive recorder...")
                 os.system("sudo systemctl stop youtube.service")
                 os.system("sudo systemctl start filetube.service")
 

@@ -259,6 +259,10 @@ v9.on('read', function() {
 
 v10.on('write', function() {
   if (keyvalue == 0){
+    exec('sudo systemctl stop filetube.service', (err, stdout, stderr) => {
+      if (err) { console.log(err); }
+      console.log(stderr);;
+    });
     exec('sudo systemctl start youtube.service', (err, stdout, stderr) => {
       if (err) { console.log(err); }
       console.log(stderr);
@@ -276,11 +280,11 @@ v11.on('write', function() {
     exec('sudo systemctl stop youtube.service', (err, stdout, stderr) => {
       if (err) { console.log(err); }
       console.log(stderr);
-   });
+    });
     exec('sudo systemctl start filetube.service', (err, stdout, stderr) => {
       if (err) { console.log(err); }
       console.log(stderr);;
-   });}
+    });}
   else{
     v10.write(0);
     v11.write(0);
