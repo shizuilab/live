@@ -10,16 +10,16 @@ import sys
 d = datetime.datetime.today()
 
 # Speak Temp and Hum
-os.system("sudo date +'%I時%M分' | /home/pi/aquestalkpi/AquesTalkPi -g 100 -f - | aplay")
+os.system("sudo date +'%I時%M分' | /home/pi/aquestalkpi/AquesTalkPi -g 100 -f - | aplay -D plughw:1,0")
 
 with open("/var/tmp/temperature.txt", "r") as myfile:
     mytemperature = myfile.read()
     mytext = "気温は摂氏" + mytemperature + "度です"
-    os.system('/home/pi/aquestalkpi/AquesTalkPi -g 100 "' + mytext + '" | aplay')
+    os.system('/home/pi/aquestalkpi/AquesTalkPi -g 100 "' + mytext + '" | aplay -D plughw:1,0')
 with open("/var/tmp/humidity.txt", "r") as myfile:
     myhumidity = myfile.read()
     mytext = "湿度は" + myhumidity + "パーセントです"
-    os.system('/home/pi/aquestalkpi/AquesTalkPi -g 100 "' + mytext + '" | aplay')
+    os.system('/home/pi/aquestalkpi/AquesTalkPi -g 100 "' + mytext + '" | aplay -D plughw:1,0')
 
 # Weather
 APP_ID = "dj0zaiZpPUhFckxmNlZqMDRubSZzPWNvbnN1bWVyc2VjcmV0Jng9ZDM-"
@@ -31,7 +31,7 @@ if tempcoordinates.find("No") < 0:
     COORDINATES = tempcoordinates
     print(COORDINATES)
 else:
-    os.system("/home/pi/aquestalkpi/AquesTalkPi -g 100 '位置を測位中です' | aplay")
+    os.system("/home/pi/aquestalkpi/AquesTalkPi -g 100 '位置を測位中です' | aplay -D plughw:1,0")
     sys.exit()
 
 OUTPUT="json"
@@ -48,9 +48,9 @@ name = zip_json_tree['Feature'][0]['Property']['Address']
 print(name)
 
 if len(name) > 0:
-    os.system('/home/pi/aquestalkpi/AquesTalkPi -g 100 "' + name + '" | aplay')
+    os.system('/home/pi/aquestalkpi/AquesTalkPi -g 100 "' + name + '" | aplay -D plughw:1,0')
 else:
-    os.system("/home/pi/aquestalkpi/AquesTalkPi -g 100 '住所を特定できません' | aplay")
+    os.system("/home/pi/aquestalkpi/AquesTalkPi -g 100 '住所を特定できません' | aplay -D plughw;1,0")
     sys.exit()
 
 # Weather forcast from Coordinates
@@ -103,5 +103,5 @@ for var in range(0,7):
 
     #print talk
     if len(talk) > 0:
-        os.system('/home/pi/aquestalkpi/AquesTalkPi -g 100 "' + talk + '" | aplay')
+        os.system('/home/pi/aquestalkpi/AquesTalkPi -g 100 "' + talk + '" | aplay -D plughw:1,0')
 
