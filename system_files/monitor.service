@@ -3,10 +3,11 @@ Description=OLED Monitor monitor.py
 Wants=network.target
 
 [Service]
-ExecStart=/home/pi/live/monitor.py
-OnBootSec=10sec
+User=pi
+ExecStart=/usr/bin/python3 /home/pi/live/monitor.py
+OnBootSec=15sec
 Restart=always
-RestartSec=1s
+RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target

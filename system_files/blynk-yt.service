@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 User=pi
-WorkingDirectory=/home/pi/wanapi
+WorkingDirectory=/home/pi/live
 ExecStart=/usr/bin/node /home/pi/live/index.js 
 Restart=always
 RestartSec=10

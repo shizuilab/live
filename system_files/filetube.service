@@ -4,7 +4,9 @@ Requires=network.target
 After=startmessage
 
 [Service]
-ExecStart=/home/pi/live/stoptube.sh
+ExecStart=/home/pi/live/file-c270.sh
+Restart=always
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
