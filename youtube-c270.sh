@@ -19,6 +19,7 @@ if [ ! -e /dev/video0 ]; then
  exit 0
 fi
 
+URL=`cat /home/pi/live/config/youtube_url.txt`
 
 if [[ $(arecord -l) == *'[USB Audio Device]'* ]]; then
  /home/pi/aquestalkpi/AquesTalkPi "音声付きストリーミングを開始します" | aplay -D plughw:1,0
@@ -31,7 +32,8 @@ if [[ $(arecord -l) == *'[USB Audio Device]'* ]]; then
  textfile='/var/tmp/location.txt':reload=1":\
  -c:v h264_omx -b:v 1000k -bufsize 3000k -vsync 0\
  -c:a aac -ab 128k -af volume=1.0 -g 16 -t 3600\
- -f flv rtmp://a.rtmp.youtube.com/live2/ux0k-wtpj-1ttr-7t0h-adqq
+ -f flv ${URL}
+# -f flv rtmp://a.rtmp.youtube.com/live2/ux0k-wtpj-1ttr-7t0h-adqq
 
 else
  /home/pi/aquestalkpi/AquesTalkPi "BGM付きストリーミングを開始します" | aplay -D plughw:1,0
@@ -44,5 +46,6 @@ else
  textfile='/var/tmp/location.txt':reload=1":\
  -c:v h264_omx -b:v 1000k -bufsize 3000k -vsync 0\
  -c:a aac -ab 128k -af volume=-10dB -g 16 -t 3600\
- -f flv rtmp://a.rtmp.youtube.com/live2/ux0k-wtpj-1ttr-7t0h-adqq
+ -f flv ${URL}
+# -f flv rtmp://a.rtmp.youtube.com/live2/ux0k-wtpj-1ttr-7t0h-adqq
 fi
