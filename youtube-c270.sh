@@ -2,12 +2,15 @@
 
 set -e
 
-sleep 5
+if [ pgrep -l file- ]; then
+ /home/pi/aquestalkpi/AquesTalkPi "ドライブレコーダーを終了しています" | aplay -D plughw:1,0
+ exit 0
+fi
 
 #sudo /bin/bash /home/pi/live/usbreset.sh
 
 if [ ! -d /media/pi/USB0/webcam ]; then
- #if [ ! -d /media/pi/USB01/webcam ]; then
+ sudo /bin/bash /home/pi/live/usbreset.sh
  /home/pi/aquestalkpi/AquesTalkPi "USBメモリがみつかりません" | aplay -D plughw:1,0
  exit 0
 fi
@@ -15,6 +18,7 @@ fi
 cat /media/pi/USB0/BGM/mylist.txt | sort -R > /home/pi/live/playlist.txt
 
 if [ ! -e /dev/video0 ]; then
+ sudo /bin/bash /home/pi/live/usbreset.sh
  /home/pi/aquestalkpi/AquesTalkPi "ビデオカメラが見つかりません" | aplay -D plughw:1,0
  exit 0
 fi
@@ -33,7 +37,6 @@ if [[ $(arecord -l) == *'[USB Audio Device]'* ]]; then
  -c:v h264_omx -b:v 1000k -bufsize 3000k -vsync 0\
  -c:a aac -ab 128k -af volume=1.0 -g 16 -t 3600\
  -f flv ${URL}
-# -f flv rtmp://a.rtmp.youtube.com/live2/ux0k-wtpj-1ttr-7t0h-adqq
 
 else
  /home/pi/aquestalkpi/AquesTalkPi "BGM付きストリーミングを開始します" | aplay -D plughw:1,0
@@ -47,5 +50,5 @@ else
  -c:v h264_omx -b:v 1000k -bufsize 3000k -vsync 0\
  -c:a aac -ab 128k -af volume=-10dB -g 16 -t 3600\
  -f flv ${URL}
-# -f flv rtmp://a.rtmp.youtube.com/live2/ux0k-wtpj-1ttr-7t0h-adqq
+
 fi

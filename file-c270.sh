@@ -2,17 +2,19 @@
 
 set -e
 
-#sudo /home/pi/live/usbreset.sh
-
-sleep 5
+if [ pgrep -l youtube- ]; then
+ /home/pi/aquestalkpi/AquesTalkPi "ユーチューブライブ配信を終了しています" | aplay -D plughw:1,0
+ exit 0
+fi
 
 if [ ! -e /dev/video0 ]; then
+ sudo /bin/bash /home/pi/live/usbreset.sh
  /home/pi/aquestalkpi/AquesTalkPi "ビデオカメラが見つかりません" | aplay -D plughw:1,0
 exit 0
 fi
 
 if [ ! -d /media/pi/USB0/webcam ]; then
- #if [ ! -d /media/pi/USB01/webcam ]; then
+ sudo /bin/bash /home/pi/live/usbreset.sh
  /home/pi/aquestalkpi/AquesTalkPi "USBメモリがみつかりません" | aplay -D plughw:1,0
  exit 0
 fi
