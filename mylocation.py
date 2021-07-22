@@ -13,18 +13,20 @@ mylocation = d.strftime("%Y年%m月%d日%H時%M分")
 
 # Temp, Hum and Pressure
 
-with open("/var/tmp/temperature.txt", "r") as myfile:
-    mytemperature = myfile.read()
-with open("/var/tmp/humidity.txt", "r") as myfile:
-    myhumidity = myfile.read()
-with open("/var/tmp/pressure.txt", "r") as myfile:
-    mypressure = myfile.read()
+#with open("/var/tmp/temperature.txt", "r") as myfile:
+#    mytemperature = myfile.read()
+#with open("/var/tmp/humidity.txt", "r") as myfile:
+#    myhumidity = myfile.read()
+#with open("/var/tmp/pressure.txt", "r") as myfile:
+#    mypressure = myfile.read()
+with open("/var/tmp/speed.txt", "r") as myfile:
+    speed = myfile.read()
 
-mylocation = mylocation + " 気温" + mytemperature + "℃ 湿度" + myhumidity + "％ 気圧" + mypressure + "hPa" 
+mylocation = mylocation + " " + speed
 
 # wanapi用にセンサーデータを書き込む
-with open("/var/tmp/sensors.txt", "w") as myfile:
-    myfile.write(mylocation)
+# with open("/var/tmp/speed.txt", "w") as myfile:
+#     myfile.write(mylocation)
 
 # Weather
 APP_ID = "dj0zaiZpPUhFckxmNlZqMDRubSZzPWNvbnN1bWVyc2VjcmV0Jng9ZDM-"
@@ -62,7 +64,7 @@ with open("/var/tmp/wanapi.txt", "w") as myfile:
 
 if len(name) > 0:
     #mylocation = mylocation + "\n" + "仮想通貨取引実況中  "
-    mylocation = mylocation + "\n" + name + " "
+    mylocation = mylocation + name + " "
 else:
     with open("/var/tmp/locationbuff.txt", "w") as myfile:
         myfile.write(mylocation)

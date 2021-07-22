@@ -29,7 +29,7 @@ var v13 = new blynk.VirtualPin(13);//Weather/Restart services
 var v14 = new blynk.VirtualPin(14);//Destination Menu
 var v15 = new blynk.VirtualPin(15);//DISTANCE
 var v16 = new blynk.WidgetMAP(16);//MAP
-var v17 = new blynk.VirtualPin(17);//Humidity
+var v17 = new blynk.VirtualPin(17);//Speed Sensors
 var v18 = new blynk.VirtualPin(18);//Temperature
 var v19 = new blynk.VirtualPin(19);//Pressure
 var v20 = new blynk.VirtualPin(20);//WanaPi
@@ -126,7 +126,7 @@ function check_status(){
       }
     });
 
-    fs.readFile('/var/tmp/humidity.txt', 'utf8', function (err, text) {
+    fs.readFile('/var/tmp/speed.txt', 'utf8', function (err, text) {
       //console.log(err);
       if(!err){
         if(text){
@@ -164,6 +164,22 @@ function check_status(){
 
     fs.access('/media/pi/USB0', function (err) {
       if(err){
+        fs.access('/media/pi/8595-5A62', function (err) {
+          if(err){
+            v3.turnOff();
+          }
+          else{
+            v3.turnOn();
+          }
+        });
+      }
+      else{
+        v3.turnOn();
+      }
+    });
+
+    fs.access('/media/pi/8595-5A62', function (err) {
+      if(err){
         v3.turnOff();
       }
       else{
@@ -184,6 +200,13 @@ function check_status(){
     if(!err){
       YahooAddress = text;
       console.log(YahooAddress);
+    }
+  });
+
+  fs.readFile('/home/pi/live/hash.txt', 'utf8', function (err, text) {
+    if(!err){
+      FileHash = text;
+      console.log(FileHash);
     }
   });
 
@@ -389,12 +412,20 @@ v14.on('write', function(param) {
 //  });
 //});
 
+//v20.on('write', function(param) {
+//  v2.write('worker0' + workerid + ':Sending');
+//
+//  console.log('worker0' + workerid + ':' + PLACE);
+//
+//  transaction('worker0' + workerid + ':' + PLACE);
+//});
+
 v20.on('write', function(param) {
-  v2.write('worker0' + workerid + ':Sending');
+  v2.write('filehash' + ':Sending');
 
-  console.log('worker0' + workerid + ':' + PLACE);
+  console.log('vt250f' + ':' + FileHash);
 
-  transaction('worker0' + workerid + ':' + PLACE);
+  transaction('vt250f' + ':' + FileHash);
 });
 
 // ここからトランザクション処理をする関数
