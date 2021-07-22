@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #import RPi.GPIO as GPIO
-import sys, os, time, ipget
+import sys, os, time, ipget, serial
 
 from board import SCL, SDA
 import busio
@@ -15,13 +15,10 @@ import datetime
 #GPIO.setmode(GPIO.BCM)
 i2c = busio.I2C(SCL, SDA)
 
-# Raspberry Pi pin configuration
+# Raspberry Pi pin & USB serial configuration
 #RST = 21
 
 disp = adafruit_ssd1306.SSD1306_I2C(128,64,i2c)
-
-# Initialize library.
-#disp.begin()
 
 # Clear display.
 disp.fill(0)
@@ -41,6 +38,34 @@ draw.rectangle((0,0,width,height), outline=0, fill=0)
 
 font = ImageFont.truetype('/usr/share/fonts/truetype/noto/NotoMono-Regular.ttf', 14, encoding='unic')
 
+# Get IP address
+try:
+    ip=ipget.ipget()
+except Exception as e:
+    print(str(type(e)))
+    draw.text((0,40), "IP ERROR", font=font, fill=255)
+    disp.image(image)
+    disp.show()
+    sys.exit()
+
+# Open Serial Port
+try:
+    ser = serial.Serial('/dev/ttyACM0', 9600, timeout=0.1)
+except Exception as e:
+    print(str(type(e)))
+    draw.text((0,0), ip.ipaddr('eth0') , font=font, fill=255)
+    draw.text((0,20), ip.ipaddr('wlan0') , font=font, fill=255)
+    draw.text((0,40), "Serial ERROR", font=font, fill=255)
+    disp.image(image)
+    disp.show()
+    sys.exit()
+
+# Send Message to Arduino
+ser.write(b'Hello VT250F')
+print("Hello VT250F  ")
+time.sleep(1)
+
+#main loop
 try:
     while True:
 
@@ -52,18 +77,34 @@ try:
         # Get IP address
         ip=ipget.ipget()
 
+        # Get USB Serial Data
+        try:
+            String_data = ser.readline().decode('utf-8')
+            #Junk_data = ser.read_all()
+        except Exception as e:
+            String_data = "SerialError";
+            print(str(type(e)))
+            sys.exit()
+
+        print(String_data)
+        if(len(String_data) > 18):
+          with open("/var/tmp/speed.txt", "w") as myfile:
+            myfile.write(String_data)
+
         draw.rectangle((0, 0, width, height), outline=0, fill=0)
 
         mystring= mydate + mytime
         draw.text((0,0), mystring, font=font, fill=255)
         draw.text((0,20), ip.ipaddr('wlan0') , font=font, fill=255)
-        draw.text((0,40), ip.ipaddr('eth0') , font=font, fill=255)
+        draw.text((0,40), String_data, font=font, fill=255)
 
         disp.image(image)
         disp.show()
 
-        time.sleep(1)
+        time.sleep(0.1)
 
 except KeyboardInterrupt:
     print('exiting...')
+    ser.close()
     sys.exit()
+
