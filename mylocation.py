@@ -19,10 +19,18 @@ mylocation = d.strftime("%Y年%m月%d日%H時%M分")
 #    myhumidity = myfile.read()
 #with open("/var/tmp/pressure.txt", "r") as myfile:
 #    mypressure = myfile.read()
+
+# スピード情報を追加
 with open("/var/tmp/speed.txt", "r") as myfile:
     speed = myfile.read()
 
 mylocation = mylocation + " " + speed
+
+# latest hash + ファイル名を追加
+with open("/home/pi/live/hash.txt", "r") as myfile:
+    hash = myfile.read()
+
+mylocation = mylocation + " " + hash
 
 # wanapi用にセンサーデータを書き込む
 # with open("/var/tmp/speed.txt", "w") as myfile:

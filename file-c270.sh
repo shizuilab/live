@@ -46,3 +46,4 @@ fi
 
 latest=`ls -rt /media/pi/$USBDRIVE/webcam/ | tail -n 1`
 md5sum /media/pi/$USBDRIVE/webcam/$latest > /home/pi/live/hash.txt
+cp /home/pi/live/hash.txt /media/pi/$USBDRIVE/webcam/$latest.hash.txt
