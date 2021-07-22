@@ -18,6 +18,10 @@ GPIO.output(25, GPIO.LOW)
 
 os.system('/home/pi/aquestalkpi/AquesTalkPi "システム起動しました" | aplay -D plughw:1,0')
 
+os.system('/home/pi/aquestalkpi/AquesTalkPi "10秒後にドライブレコーダーを開始します" | aplay -D plughw:1,0')
+
+time.sleep(10)
+
 os.system("sudo systemctl start filetube")
 
 try:
@@ -38,11 +42,12 @@ try:
 
         if(button_current and (not button_previous)):
             GPIO.output(24,GPIO.LOW)
-            os.system('/home/pi/aquestalkpi/AquesTalkPi "再起動します" | aplay -D plughw:1,0')
-            os.system("sudo shutdown -r now")
+            os.system('/home/pi/aquestalkpi/AquesTalkPi "シャットダウンします" | aplay -D plughw:1,0')
+            os.system('/home/pi/live/shutdownVT.sh')
+            os.system("sudo shutdown -h now")
         if((not flag_pressed) and brojac >= 5):
             GPIO.output(24,GPIO.LOW)
-            os.system('/home/pi/aquestalkpi/AquesTalkPi "シャットダウンします" | aplay -D plughw:1,0')
+            os.system('/home/pi/aquestalkpi/AquesTalkPi "強制シャットダウンします" | aplay -D plughw:1,0')
             os.system("sudo shutdown -h now")
             break
 
