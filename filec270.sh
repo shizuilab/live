@@ -31,7 +31,6 @@ if [ -f /var/tmp/location.txt ]; then
  textfile='/var/tmp/location.txt':reload=1"\
  -c:v h264_omx  -b:v 3000k -bufsize 10000k -vsync 0 -t 600\
  /media/pi/$USBDRIVE/webcam/`date +%Y%m%d_%H%M%S`.mp4
- #/media/pi/USB01/webcam/`date +%Y%m%d_%H%M%S`.mp4
 
 else
 

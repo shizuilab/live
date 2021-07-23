@@ -46,7 +46,6 @@ except Exception as e:
     draw.text((0,40), "IP ERROR", font=font, fill=255)
     disp.image(image)
     disp.show()
-    sys.exit()
 
 # Open Serial Port
 try:

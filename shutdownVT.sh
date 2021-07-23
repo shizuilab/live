@@ -9,8 +9,8 @@ else
  /home/pi/aquestalkpi/AquesTalkPi "USBメモリがみつかりませんが続行します" | aplay -D plughw:1,0
 fi
 
-sudo pkill -SIGTERM -f youtube-
-sudo pkill -SIGTERM -f file-
+sudo pkill -SIGTERM -f youtubec270
+sudo pkill -SIGTERM -f filec270
 
 /home/pi/aquestalkpi/AquesTalkPi "配信システムを終了しています" | aplay -D plughw:1,0
 sleep 4
