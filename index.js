@@ -57,7 +57,7 @@ const exec = require('child_process').exec;
 function check_status(){
   v1.write(keyvalue);
 
-  exec('pgrep -l youtube-', (err, stdout, stderr) => {
+  exec('pgrep -l youtubec270', (err, stdout, stderr) => {
     //if (err) { console.log(err); }
     if(stdout){
       //console.log(stdout);
@@ -70,7 +70,7 @@ function check_status(){
     }
   });
 
-  exec('pgrep -l file-', (err, stdout, stderr) => {
+  exec('pgrep -l filec270', (err, stdout, stderr) => {
     //if (err) { console.log(err); }
     if(stdout != ""){
       //console.log(stdout);
@@ -178,15 +178,6 @@ function check_status(){
       }
     });
 
-    fs.access('/media/pi/8595-5A62', function (err) {
-      if(err){
-        v3.turnOff();
-      }
-      else{
-        v3.turnOn();
-      }
-    });
-
     fs.access('/dev/video0', function (err) {
       if(err){
         v4.turnOff();
@@ -284,7 +275,7 @@ v10.on('write', function() {
   if (keyvalue == 0){
     exec('sudo systemctl stop filetube.service', (err, stdout, stderr) => {
       if (err) { console.log(err); }
-      console.log(stderr);;
+      console.log(stderr);
     });
     exec('sudo systemctl start youtube.service', (err, stdout, stderr) => {
       if (err) { console.log(err); }
