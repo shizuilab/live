@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #import RPi.GPIO as GPIO
-import sys, os, time, ipget, serial
+import sys, os, time, serial
 
 from board import SCL, SDA
 import busio
@@ -14,9 +14,6 @@ import datetime
 
 #GPIO.setmode(GPIO.BCM)
 i2c = busio.I2C(SCL, SDA)
-
-# Raspberry Pi pin & USB serial configuration
-#RST = 21
 
 disp = adafruit_ssd1306.SSD1306_I2C(128,64,i2c)
 
@@ -37,15 +34,6 @@ draw = ImageDraw.Draw(image)
 draw.rectangle((0,0,width,height), outline=0, fill=0)
 
 font = ImageFont.truetype('/usr/share/fonts/truetype/noto/NotoMono-Regular.ttf', 14, encoding='unic')
-
-# Get IP address
-try:
-    ip=ipget.ipget()
-except Exception as e:
-    print(str(type(e)))
-    draw.text((0,40), "IP ERROR", font=font, fill=255)
-    disp.image(image)
-    disp.show()
 
 # Open Serial Port
 try:
@@ -73,8 +61,9 @@ try:
         mydate = d.strftime("%m/%d-")
         mytime = d.strftime("%H:%M:%S")
 
-        # Get IP address
-        ip=ipget.ipget()
+        # Read IP Address
+        with open("/var/tmp/ipaddress.txt", "r") as myfile:
+            ipaddress = myfile.read()
 
         # Get USB Serial Data
         try:
@@ -90,11 +79,13 @@ try:
           with open("/var/tmp/speed.txt", "w") as myfile:
             myfile.write(String_data)
 
+
+
         draw.rectangle((0, 0, width, height), outline=0, fill=0)
 
         mystring= mydate + mytime
         draw.text((0,0), mystring, font=font, fill=255)
-        draw.text((0,20), ip.ipaddr('wlan0') , font=font, fill=255)
+        draw.text((0,20), ipaddress, font=font, fill=255)
         draw.text((0,40), String_data, font=font, fill=255)
 
         disp.image(image)
