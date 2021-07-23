@@ -2,8 +2,6 @@
 
 set -e
 
-#sudo /bin/bash /home/pi/live/usbreset.sh
-
 if [ ! -e /dev/video0 ]; then
  sudo /bin/bash /home/pi/live/usbreset.sh
  /home/pi/aquestalkpi/AquesTalkPi "ビデオカメラが見つかりません" | aplay -D plughw:1,0

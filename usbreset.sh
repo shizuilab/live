@@ -1,8 +1,14 @@
 #!/usr/bin/bash
-ID='046d:0825'
-MATCHES=$(lsusb | sed -n 's/Bus \([0-9]*\) Device \([0-9]*\): ID '$ID'.*/\/dev\/bus\/usb\/\1\/\2/p')
-if [ -z ${MATCHES} ]; then
- echo "No match found"
-else
- sudo /home/pi/live/usbreset $MATCHES
-fi
+#ID='046d:0825' #old camera
+BUS1=`lsusb | grep 'C270' | tail -1 | cut --delimiter=' ' --fields='2' | tr --delete ':'`
+ID1=`lsusb | grep 'C270' | tail -1 | cut --delimiter=' ' --fields='4' | tr --delete ':'`
+PATH1="/dev/bus/usb/${BUS1}/${ID1}"
+echo $PATH1
+/usr/bin/sudo /home/pi/live/usbreset $PATH1
+
+BUS2=`lsusb | grep 'Arduino' | tail -1 | cut --delimiter=' ' --fields='2' | tr --delete ':'`
+ID2=`lsusb | grep 'Arduino' | tail -1 | cut --delimiter=' ' --fields='4' | tr --delete ':'`
+PATH2="/dev/bus/usb/${BUS2}/${ID2}"
+echo $PATH2
+/usr/bin/sudo /home/pi/live/usbreset $PATH2
+

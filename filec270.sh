@@ -24,7 +24,6 @@ if [ -f /var/tmp/location.txt ]; then
  /home/pi/aquestalkpi/AquesTalkPi "ドライブレコーダーを開始します" | aplay -D plughw:1,0
 
  ffmpeg -f v4l2 -thread_queue_size 8192\
- -f alsa -thread_queue_size 8192 -i plughw:2,0\
  -input_format yuyv422 -video_size 864x480 -framerate 20 -i /dev/video0\
  -vf drawtext="fontfile=/usr/share/fonts/truetype/fonts-japanese-gothic.ttf:\
  fontcolor=#FFFFFF:fontsize=20:x=10:y=10:box=1:boxcolor=black@0.4:\
