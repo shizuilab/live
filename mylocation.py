@@ -30,7 +30,7 @@ mylocation = mylocation + " " + speed
 with open("/home/pi/live/hash.txt", "r") as myfile:
     hash = myfile.read()
 
-mylocation = mylocation + " " + hash
+mylocation = mylocation + hash
 
 # wanapi用にセンサーデータを書き込む
 # with open("/var/tmp/speed.txt", "w") as myfile:

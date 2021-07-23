@@ -17,6 +17,21 @@ if [ ! -e /dev/video0 ]; then
  exit 0
 fi
 
+if [ -d /media/pi/USB0/webcam ]; then
+ USBDRIVE=USB0
+elif [ -d /media/pi/8595-5A62/webcam ]; then
+ USBDRIVE=8595-5A62
+else
+ sudo /bin/bash /home/pi/live/usbreset.sh
+ /home/pi/aquestalkpi/AquesTalkPi "USBメモリがみつかりません" | aplay -D plughw:1,0
+ exit 0
+fi
+
+latest=`ls -rt /media/pi/$USBDRIVE/webcam/ | tail -n 1`
+md5sum /media/pi/$USBDRIVE/webcam/$latest > /home/pi/live/hash.txt
+cp /home/pi/live/hash.txt /media/pi/$USBDRIVE/webcam/$latest.hash.txt
+/home/pi/aquestalkpi/AquesTalkPi "最新ファイルのハッシュ値を保存しました" | aplay -D plughw:1,0
+
 URL=`cat /home/pi/live/config/youtube_url.txt`
 
 if [[ $(arecord -l) == *'[USB Audio]'* ]]; then
