@@ -52,21 +52,15 @@ try:
             break
 
         sw_status2 = GPIO.input(23)
-        if os.system('pgrep -l youtube-') == 0:
+        if os.system('pgrep -l ffmpeg') == 0:
             GPIO.output(25, GPIO.HIGH)
         else:
             GPIO.output(25, GPIO.LOW)
 
         if sw_status2 == 0:
-            GPIO.output(25, GPIO.HIGH)
-            if os.system('pgrep -l youtube-') == 256:
-                print("starting Youtube streameing...")
-                os.system("sudo systemctl stop filetube.service")
-                os.system("sudo systemctl start youtube.service")
-            else:
-                print("starting drive recorder...")
-                os.system("sudo systemctl stop youtube.service")
-                os.system("sudo systemctl start filetube.service")
+            os.system('/home/pi/aquestalkpi/AquesTalkPi "カメラをリセットします" | aplay -D plughw:1,0')
+            os.system('/home/pi/usbreset.sh')
+            time.sleep(1)
 
         button_previous = button_current
         time.sleep(0.5)
