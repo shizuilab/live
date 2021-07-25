@@ -47,8 +47,8 @@ try:
             os.system("sudo shutdown -h now")
         if((not flag_pressed) and brojac >= 5):
             GPIO.output(24,GPIO.LOW)
-            os.system('/home/pi/aquestalkpi/AquesTalkPi "強制シャットダウンします" | aplay -D plughw:1,0')
-            os.system("sudo shutdown -h now")
+            os.system('/home/pi/aquestalkpi/AquesTalkPi "再起動をします" | aplay -D plughw:1,0')
+            os.system("sudo reboot")
             break
 
         sw_status2 = GPIO.input(23)

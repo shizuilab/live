@@ -32,7 +32,7 @@ if [[ $(arecord -l) == *'[USB Audio]'* ]]; then
 
  ffmpeg\
  -f alsa -thread_queue_size 8192 -i plughw:2,0\
- -f v4l2 -thread_queue_size 16384 -input_format yuyv422 -video_size 864x480 -framerate 20 -itsoffset 0.4 -i /dev/video0\
+ -f v4l2 -thread_queue_size 16384 -input_format yuyv422 -video_size 752x416 -framerate 20 -itsoffset 0.4 -i /dev/video0\
  -vf drawtext="fontfile=/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc:\
  fontcolor=#FFFFFF:fontsize=20:x=10:y=10:box=1:boxcolor=black@0.4:\
  textfile='/var/tmp/location.txt':reload=1":\
